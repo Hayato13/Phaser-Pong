@@ -39,7 +39,7 @@
     function preload ()
     {
       this.load.image('ball', 'assets/whiteball.png');
-      this.load.image('bar', 'assets/vertical_bar.png');
+      this.load.image('paddle', 'assets/vertical_bar.png');
       this.load.image('background', 'assets/grey_background.png');
     }
 
@@ -47,11 +47,11 @@
     {
       this.add.image(960, 510, 'background');
 
-      barLeft = this.physics.add.sprite(20, 510, 'bar').setScale(0.25);
+      paddleLeft = this.physics.add.sprite(20, 510, 'paddle').setScale(0.25);
 
       ball = this.physics.add.sprite(920, 510, 'ball').setScale(0.10);
 
-      barRight = this.physics.add.sprite(1910, 510, 'bar').setScale(0.25);
+      paddleRight = this.physics.add.sprite(1910, 510, 'paddle').setScale(0.25);
 
       cursors = this.input.keyboard.createCursorKeys();
 
@@ -61,19 +61,19 @@
     function update ()
     {
       if (cursors.up.isDown) {
-        barRight.setVelocityY(-350);
+        paddleRight.setVelocityY(-350);
       } else if (cursors.down.isDown) {
-        barRight.setVelocityY(350);
+        paddleRight.setVelocityY(350);
       } else {
-        barRight.setVelocity(0);
+        paddleRight.setVelocity(0);
       }
 
       if (wasd.up.isDown){
-        barLeft.setVelocityY(-350);
+        paddleLeft.setVelocityY(-350);
       } else if (wasd.down.isDown) {
-        barLeft.setVelocityY(350);
+        paddleLeft.setVelocityY(350);
       } else {
-        barLeft.setVelocity(0);
+        paddleLeft.setVelocity(0);
       }
     }
 
