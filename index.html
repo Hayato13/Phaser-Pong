@@ -15,7 +15,7 @@
 <script type="text/javascript">
     var config = {
         type: Phaser.AUTO,
-        width: 2000,
+        width: 1920,
         height: 970,
         physics: {
         default: 'arcade',
@@ -36,25 +36,20 @@
     {
       this.load.image('ball', 'assets/whiteball.png');
       this.load.image('paddle', 'assets/vertical_bar.png');
-      this.load.image('background', 'assets/grey_background.png');
     }
+
     function create ()
     {
-      this.add.image(960, 510, 'background');
-
-      paddleLeft = this.physics.add.sprite(20, 510, 'paddle').setScale(0.25);
+      paddleLeft = this.physics.add.sprite(0, 510, 'paddle').setScale(0.5);
       paddleLeft.setCollideWorldBounds(true);
 
-
-      paddleRight = this.physics.add.sprite(1900, 510, 'paddle').setScale(0.25);
+      paddleRight = this.physics.add.sprite(1920, 510, 'paddle').setScale(0.5);
       paddleRight.setCollideWorldBounds(true);
-
 
       ball = this.physics.add.sprite(920, 510, 'ball').setScale(0.10);
       ball.setVelocity(300, 300);
       ball.setBounce(1,1);
       ball.setCollideWorldBounds(true);
-
 
       cursors = this.input.keyboard.createCursorKeys();
       wasd = this.input.keyboard.addKeys({'up': Phaser.Input.Keyboard.KeyCodes.W, 'down': Phaser.Input.Keyboard.KeyCodes.S});
@@ -95,6 +90,8 @@
         ballVelocityY *= -1;
       }
       ball.setVelocity(ballVelocityY, ballVelocityX);
+      ball.ArcadeBodyCollision.right;
+
     }
 </script>
 
