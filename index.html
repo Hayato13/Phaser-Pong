@@ -13,10 +13,9 @@
 <body>
 
 <script type="text/javascript">
-
     var config = {
         type: Phaser.AUTO,
-        width: 1920,
+        width: 2000,
         height: 970,
         physics: {
         default: 'arcade',
@@ -30,36 +29,38 @@
             update: update
         }
     };
-
     var cursors;
     var wasd;
-
     var game = new Phaser.Game(config);
-
     function preload ()
     {
       this.load.image('ball', 'assets/whiteball.png');
       this.load.image('paddle', 'assets/vertical_bar.png');
       this.load.image('background', 'assets/grey_background.png');
     }
-
     function create ()
     {
       this.add.image(960, 510, 'background');
 
       paddleLeft = this.physics.add.sprite(20, 510, 'paddle').setScale(0.25);
-
       paddleLeft.setCollideWorldBounds(true);
 
-      ball = this.physics.add.sprite(920, 510, 'ball').setScale(0.10);
 
-      paddleRight = this.physics.add.sprite(1910, 510, 'paddle').setScale(0.25);
-
+      paddleRight = this.physics.add.sprite(1900, 510, 'paddle').setScale(0.25);
       paddleRight.setCollideWorldBounds(true);
 
-      cursors = this.input.keyboard.createCursorKeys();
 
+      ball = this.physics.add.sprite(920, 510, 'ball').setScale(0.10);
+      ball.setVelocity(300, 300);
+      ball.setBounce(1,1);
+      ball.setCollideWorldBounds(true);
+
+
+      cursors = this.input.keyboard.createCursorKeys();
       wasd = this.input.keyboard.addKeys({'up': Phaser.Input.Keyboard.KeyCodes.W, 'down': Phaser.Input.Keyboard.KeyCodes.S});
+
+      this.physics.add.collider(paddleRight, ball, paddleCollision, null, this);
+      this.physics.add.collider(paddleLeft, ball, paddleCollision, null, this);
     }
 
     function update ()
@@ -71,7 +72,6 @@
       } else {
         paddleRight.setVelocity(0);
       }
-
       if (wasd.up.isDown){
         paddleLeft.setVelocityY(-350);
       } else if (wasd.down.isDown) {
@@ -81,6 +81,21 @@
       }
     }
 
+    var ballVelocityY = 300;
+    var ballVelocityX = 300;
+
+    function paddleCollision (){
+      if (Math.sign(ballVelocityY) === 1 && Math.sign(ballVelocityX) === 1){
+        ballVelocityX *= -1;
+      } else if (Math.sign(ballVelocityY) === -1 && Math.sign(ballVelocityX) === 1){
+        ballVelocityX *= -1;
+      } else if (Math.sign(ballVelocityY) === 1 && Math.sign(ballVelocityX) === -1){
+        ballVelocityY *= -1;
+      } else {
+        ballVelocityY *= -1;
+      }
+      ball.setVelocity(ballVelocityY, ballVelocityX);
+    }
 </script>
 
 </body>
