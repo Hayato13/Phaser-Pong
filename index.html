@@ -31,15 +31,25 @@
     };
     var cursors;
     var wasd;
+    var leftScoreText;
+    var leftScore = 0;
+    var rightScoreText;
+    var rightScore = 0;
+    var wall;
+
     var game = new Phaser.Game(config);
     function preload ()
     {
       this.load.image('ball', 'assets/whiteball.png');
       this.load.image('paddle', 'assets/vertical_bar.png');
+      this.load.image('wall', 'assets/wall.png');
     }
 
     function create ()
     {
+      leftWall = this.physics.add.sprite(-310, 485, 'wall').setScale(1.3);
+      rightWall = this.physics.add.sprite(2230, 485, 'wall').setScale(1.3);
+
       paddleLeft = this.physics.add.sprite(0, 510, 'paddle').setScale(0.5);
       paddleLeft.setCollideWorldBounds(true);
 
@@ -47,15 +57,20 @@
       paddleRight.setCollideWorldBounds(true);
 
       ball = this.physics.add.sprite(920, 510, 'ball').setScale(0.10);
-      ball.setVelocity(300, 300);
+      ball.setVelocity(-300, 300);
       ball.setBounce(1,1);
       ball.setCollideWorldBounds(true);
 
       cursors = this.input.keyboard.createCursorKeys();
       wasd = this.input.keyboard.addKeys({'up': Phaser.Input.Keyboard.KeyCodes.W, 'down': Phaser.Input.Keyboard.KeyCodes.S});
 
-      this.physics.add.collider(paddleRight, ball, paddleCollision, null, this);
-      this.physics.add.collider(paddleLeft, ball, paddleCollision, null, this);
+      this.physics.add.collider(paddleRight, ball, collision, null, this);
+      this.physics.add.collider(paddleLeft, ball, collision, null, this);
+      this.physics.add.collider(rightWall, ball, scoreCollision, null, this);
+      this.physics.add.collider(leftWall, ball, scoreCollision, null, this);
+
+      leftScoreText = this.add.text(450, 100, '0', {fontSize: '100px', fill: '#ffffff'});
+      rightScoreText = this.add.text(1470, 100, '0', {fontSize: '100px', fill: '#ffffff'});
     }
 
     function update ()
@@ -79,7 +94,7 @@
     var ballVelocityY = 300;
     var ballVelocityX = 300;
 
-    function paddleCollision (){
+    function collision () {
       if (Math.sign(ballVelocityY) === 1 && Math.sign(ballVelocityX) === 1){
         ballVelocityX *= -1;
       } else if (Math.sign(ballVelocityY) === -1 && Math.sign(ballVelocityX) === 1){
@@ -89,10 +104,20 @@
       } else {
         ballVelocityY *= -1;
       }
-      ball.setVelocity(ballVelocityY, ballVelocityX);
-      ball.ArcadeBodyCollision.right;
 
+      ball.setVelocity(ballVelocityY, ballVelocityX);
     }
+
+    function scoreCollision () {
+      if (ball.x <= 960){
+        rightScore ++;
+        rightScoreText.setText(rightScore);
+      }else if (ball.x >= 960) {
+        leftScore ++;
+        leftScoreText.setText(leftScore);
+      }
+    }
+
 </script>
 
 </body>
