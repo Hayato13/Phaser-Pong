@@ -37,6 +37,9 @@
     var rightScore = 0;
     var leftWall;
     var rightWall;
+    var ballVelocityY = 300;
+    var ballVelocityX = 300;
+
 
     var game = new Phaser.Game(config);
     function preload ()
@@ -49,10 +52,10 @@
     function create ()
     {
       leftWall = this.physics.add.staticGroup();
-      leftWall.create(-310, 485, 'wall').setScale(1.3).refreshBody();
+      leftWall.create(-20, 485, 'wall').setScale(2).refreshBody();
 
       rightWall = this.physics.add.staticGroup();
-      rightWall.create(2230, 485, 'wall').setScale(1.3).refreshBody();
+      rightWall.create(1940, 485, 'wall').setScale(2).refreshBody();
 
       paddleLeft = this.physics.add.sprite(0, 510, 'paddle').setScale(0.5);
       paddleLeft.setCollideWorldBounds(true);
@@ -61,7 +64,7 @@
       paddleRight.setCollideWorldBounds(true);
 
       ball = this.physics.add.sprite(920, 510, 'ball').setScale(0.10);
-      ball.setVelocity(-300, 300);
+      ball.setVelocity(ballVelocityX, ballVelocityY);
       ball.setBounce(1,1);
       ball.setCollideWorldBounds(true);
 
@@ -95,33 +98,52 @@
       }
     }
 
-    var ballVelocityY = 300;
-    var ballVelocityX = 300;
-
     function collision () {
       if (Math.sign(ballVelocityY) === 1 && Math.sign(ballVelocityX) === 1){
         ballVelocityX *= -1;
+        returnSpeed();
       } else if (Math.sign(ballVelocityY) === -1 && Math.sign(ballVelocityX) === 1){
         ballVelocityX *= -1;
+        returnSpeed();
       } else if (Math.sign(ballVelocityY) === 1 && Math.sign(ballVelocityX) === -1){
         ballVelocityY *= -1;
+        returnSpeed();
       } else {
         ballVelocityY *= -1;
+        returnSpeed();
       }
 
       ball.setVelocity(ballVelocityY, ballVelocityX);
+    }
+
+    function returnSpeed () {
+      if (Math.sign(ballVelocityX === 1)){
+          ballVelocityX += Phaser.Math.Between(-20, 50);
+      }else {
+          ballVelocityX += Phaser.Math.Between(-50,20);
+      }
+
+      if (Math.sign(ballVelocityY === 1)){
+        ballVelocityY += Phaser.Math.Between(-20,50);
+      }else {
+        ballVelocityY += Phaser.Math.Between(-50,20);
+      }
     }
 
     function scoreCollision () {
       if (ball.x <= 960){
         rightScore ++;
         rightScoreText.setText(rightScore);
+        leftWall.x = -10;
+        rightWall.x = 1930;
         ball.x = 920;
         ball.y = 510;
         ball.setVelocity(300, 300);
       } else if (ball.x >= 960) {
         leftScore ++;
         leftScoreText.setText(leftScore);
+        leftWall.x = -10;
+        rightWall.x = 1930;
         ball.x = 920;
         ball.y = 510;
         ball.setVelocity(300, 300);
