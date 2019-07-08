@@ -39,6 +39,8 @@
     var rightWall;
     var ballVelocityY = 300;
     var ballVelocityX = 300;
+    var ballVelocityXText;
+    var ballVelocityYText;
 
 
     var game = new Phaser.Game(config);
@@ -71,13 +73,15 @@
       cursors = this.input.keyboard.createCursorKeys();
       wasd = this.input.keyboard.addKeys({'up': Phaser.Input.Keyboard.KeyCodes.W, 'down': Phaser.Input.Keyboard.KeyCodes.S});
 
-      this.physics.add.collider(paddleRight, ball, collision, null, this);
-      this.physics.add.collider(paddleLeft, ball, collision, null, this);
+      this.physics.add.collider(paddleRight, ball, rightCollision, null, this);
+      this.physics.add.collider(paddleLeft, ball, leftCollision, null, this);
       this.physics.add.collider(rightWall, ball, scoreCollision, null, this);
       this.physics.add.collider(leftWall, ball, scoreCollision, null, this);
 
       leftScoreText = this.add.text(450, 100, '0', {fontSize: '100px', fill: '#ffffff'});
       rightScoreText = this.add.text(1470, 100, '0', {fontSize: '100px', fill: '#ffffff'});
+      ballVelocityXText = this.add.text(450, 400, '0', {fontSize: '50px', fill: '#ffffff'});
+      ballVelocityYText = this.add.text(1470, 400, '0', {fontSize: '50px', fill: '#ffffff'});
     }
 
     function update ()
@@ -89,6 +93,7 @@
       } else {
         paddleRight.setVelocity(0);
       }
+
       if (wasd.up.isDown){
         paddleLeft.setVelocityY(-350);
       } else if (wasd.down.isDown) {
@@ -96,24 +101,21 @@
       } else {
         paddleLeft.setVelocity(0);
       }
+
+      ballVelocityXText.setText(ball.body.velocity.x);
+      ballVelocityYText.setText(ball.body.velocity.y);
     }
 
-    function collision () {
-      if (Math.sign(ballVelocityY) === 1 && Math.sign(ballVelocityX) === 1){
-        ballVelocityX *= -1;
-        returnSpeed();
-      } else if (Math.sign(ballVelocityY) === -1 && Math.sign(ballVelocityX) === 1){
-        ballVelocityX *= -1;
-        returnSpeed();
-      } else if (Math.sign(ballVelocityY) === 1 && Math.sign(ballVelocityX) === -1){
-        ballVelocityY *= -1;
-        returnSpeed();
-      } else {
-        ballVelocityY *= -1;
-        returnSpeed();
-      }
+    function leftCollision () {
+      ballVelocityX *= -1;
+      returnSpeed();
+      ball.setVelocityX(ballVelocityX);
+    }
 
-      ball.setVelocity(ballVelocityY, ballVelocityX);
+    function rightCollision () {
+      ballVelocityX *= -1;
+      returnSpeed();
+      ball.setVelocityX(ballVelocityX);
     }
 
     function returnSpeed () {
@@ -134,19 +136,17 @@
       if (ball.x <= 960){
         rightScore ++;
         rightScoreText.setText(rightScore);
-        leftWall.x = -10;
-        rightWall.x = 1930;
         ball.x = 920;
         ball.y = 510;
-        ball.setVelocity(300, 300);
+        ballVelocityX = 300;
+        ballVelocityY = 300;
       } else if (ball.x >= 960) {
         leftScore ++;
         leftScoreText.setText(leftScore);
-        leftWall.x = -10;
-        rightWall.x = 1930;
         ball.x = 920;
         ball.y = 510;
-        ball.setVelocity(300, 300);
+        ballVelocityX = 300;
+        ballVelocityY = 300;
       }
     }
 
