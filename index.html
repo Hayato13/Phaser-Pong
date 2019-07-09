@@ -87,17 +87,17 @@
     function update ()
     {
       if (cursors.up.isDown) {
-        paddleRight.setVelocityY(-350);
+        paddleRight.setVelocityY(-400);
       } else if (cursors.down.isDown) {
-        paddleRight.setVelocityY(350);
+        paddleRight.setVelocityY(400);
       } else {
         paddleRight.setVelocity(0);
       }
 
       if (wasd.up.isDown){
-        paddleLeft.setVelocityY(-350);
+        paddleLeft.setVelocityY(-400);
       } else if (wasd.down.isDown) {
-        paddleLeft.setVelocityY(350);
+        paddleLeft.setVelocityY(400);
       } else {
         paddleLeft.setVelocity(0);
       }
