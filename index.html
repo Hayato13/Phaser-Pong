@@ -140,6 +140,14 @@
       }
     }
 
+    function positiveNegative(){
+      if (Phaser.Math.Between(-50,49) >= 0){
+        return 1;
+      }else {
+        return -1;
+      }
+    }
+
     function scoreCollision () {
       if (ball.x <= 960){
         rightScore ++;
@@ -148,6 +156,9 @@
         ball.y = 510;
         ballVelocityX = 300;
         ballVelocityY = 300;
+        ball.setVelocity(ballVelocityX, ballVelocityY);
+        ball.body.velocity.x *= positiveNegative();
+        ball.body.velocity.y *= positiveNegative();
       } else if (ball.x >= 960) {
         leftScore ++;
         leftScoreText.setText(leftScore);
@@ -155,6 +166,9 @@
         ball.y = 510;
         ballVelocityX = 300;
         ballVelocityY = 300;
+        ball.setVelocity(ballVelocityX, ballVelocityY);
+        ball.body.velocity.x *= positiveNegative();
+        ball.body.velocity.y *= positiveNegative();
       }
     }
 
