@@ -148,27 +148,30 @@
       }
     }
 
+    function ballRespawn(){
+      ballVelocityX = 300;
+      ballVelocityY = 300;
+      ball.setVelocity(ballVelocityX, ballVelocityY);
+      ball.body.velocity.x *= positiveNegative();
+      ball.body.velocity.y *= positiveNegative();
+    }
+
     function scoreCollision () {
       if (ball.x <= 960){
         rightScore ++;
         rightScoreText.setText(rightScore);
         ball.x = 920;
         ball.y = 510;
-        ballVelocityX = 300;
-        ballVelocityY = 300;
-        ball.setVelocity(ballVelocityX, ballVelocityY);
-        ball.body.velocity.x *= positiveNegative();
-        ball.body.velocity.y *= positiveNegative();
+        ball.setVelocity(0,0);
+        setTimeout(ballRespawn, 1000);
       } else if (ball.x >= 960) {
         leftScore ++;
         leftScoreText.setText(leftScore);
         ball.x = 920;
         ball.y = 510;
-        ballVelocityX = 300;
-        ballVelocityY = 300;
-        ball.setVelocity(ballVelocityX, ballVelocityY);
-        ball.body.velocity.x *= positiveNegative();
-        ball.body.velocity.y *= positiveNegative();
+        ball.setVelocity(0,0);
+        setTimeout(ballRespawn, 1000);
+
       }
     }
 
