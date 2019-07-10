@@ -27,8 +27,12 @@
             preload: preload,
             create: create,
             update: update
+        },
+        audio: {
+          disableWebAudio: true
         }
     };
+
     var cursors;
     var wasd;
     var leftScoreText;
@@ -41,6 +45,7 @@
     var ballVelocityX = 300;
     var ballVelocityXText;
     var ballVelocityYText;
+    var bounceSound;
 
 
     var game = new Phaser.Game(config);
@@ -49,10 +54,15 @@
       this.load.image('ball', 'assets/whiteball.png');
       this.load.image('paddle', 'assets/vertical_bar.png');
       this.load.image('wall', 'assets/wall.png');
+      this.load.audio('sfx', 'assets/bounce.wav', {
+        instances: 1
+      });
     }
 
     function create ()
     {
+      this.sound.add('sfx');
+
       leftWall = this.physics.add.staticGroup();
       leftWall.create(-20, 485, 'wall').setScale(2).refreshBody();
 
@@ -80,8 +90,8 @@
 
       leftScoreText = this.add.text(450, 100, '0', {fontSize: '100px', fill: '#ffffff'});
       rightScoreText = this.add.text(1470, 100, '0', {fontSize: '100px', fill: '#ffffff'});
-      ballVelocityXText = this.add.text(450, 400, '0', {fontSize: '50px', fill: '#ffffff'});
-      ballVelocityYText = this.add.text(1470, 400, '0', {fontSize: '50px', fill: '#ffffff'});
+      //ballVelocityXText = this.add.text(450, 400, '0', {fontSize: '50px', fill: '#ffffff'});
+      //ballVelocityYText = this.add.text(1470, 400, '0', {fontSize: '50px', fill: '#ffffff'});
     }
 
     function update ()
@@ -102,11 +112,24 @@
         paddleLeft.setVelocity(0);
       }
 
-      ballVelocityXText.setText(ball.body.velocity.x);
-      ballVelocityYText.setText(ball.body.velocity.y);
+      //ballVelocityXText.setText(ball.body.velocity.x);
+      //ballVelocityYText.setText(ball.body.velocity.y);
+
+      if (ball.body.blocked.up === true){
+        this.sound.play('sfx');
+      }else if (ball.body.blocked.down === true){
+        this.sound.play('sfx');
+      }else if (paddleRight.body.blocked.right === true){
+        this.sound.play('sfx');
+      }else if (paddleLeft.body.blocked.left === true){
+        this.sound.play('sfx');
+      };
     }
 
     function leftCollision () {
+      if (ball.x === 35){
+        this.sound.play('sfx');
+      }
       ballVelocityX *= -1;
       returnSpeed();
       ball.setVelocityX(ballVelocityX);
@@ -119,6 +142,9 @@
     }
 
     function rightCollision () {
+      if (ball.x === 1855){
+        this.sound.play('sfx');
+      }
       ballVelocityX *= -1;
       returnSpeed();
       ball.setVelocityX(ballVelocityX);
