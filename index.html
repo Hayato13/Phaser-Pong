@@ -35,6 +35,7 @@
 
     var cursors;
     var wasd;
+    var pause;
     var leftScoreText;
     var leftScore = 0;
     var rightScoreText;
@@ -47,9 +48,11 @@
     var ballVelocityYText;
     var bounceSound;
     var restart;
+    var pauseText;
 
 
     var game = new Phaser.Game(config);
+
     function preload ()
     {
       this.load.image('ball', 'assets/whiteball.png');
@@ -98,6 +101,7 @@
 
       cursors = this.input.keyboard.createCursorKeys();
       wasd = this.input.keyboard.addKeys({'up': Phaser.Input.Keyboard.KeyCodes.W, 'down': Phaser.Input.Keyboard.KeyCodes.S});
+      pause = this.input.keyboard.addKeys({'esc': Phaser.Input.Keyboard.KeyCodes.ESC});
 
       this.physics.add.collider(paddleRight, ball, rightCollision, null, this);
       this.physics.add.collider(paddleLeft, ball, leftCollision, null, this);
@@ -106,8 +110,26 @@
 
       leftScoreText = this.add.text(450, 100, '0', {fontSize: '100px', fill: '#ffffff'});
       rightScoreText = this.add.text(1470, 100, '0', {fontSize: '100px', fill: '#ffffff'});
+      pauseText = this.add.text(775, 450, 'Paused', {fontSize: '100px', fill: '#ffffff'});
+      pauseText.setVisible(false);
       //ballVelocityXText = this.add.text(450, 400, '0', {fontSize: '50px', fill: '#ffffff'});
       //ballVelocityYText = this.add.text(1470, 400, '0', {fontSize: '50px', fill: '#ffffff'});
+
+      this.input.keyboard.on('keydown_ESC', function () {
+        if (ball.body.moves){
+          ball.body.moves = false;
+          paddleLeft.body.moves = false;
+          paddleRight.body.moves = false;
+          pauseText.setVisible(true);
+          restart.input.enabled = false;
+        } else {
+          ball.body.moves = true;
+          paddleLeft.body.moves = true;
+          paddleRight.body.moves = true;
+          pauseText.setVisible(false);
+          restart.input.enabled = true;
+        }
+      });
     }
 
     function update ()
