@@ -1,4 +1,4 @@
-#Pong made using Phaser 3
+# Pong made using Phaser 3
 
 This is a simple pong game that I made to learn some of the functionality of Phaser 3
 
